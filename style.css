@@ -1,17 +1,21 @@
 /* ======= CSS VARIABLES ======= */
 :root {
-    --bg-color: #050a05; /* Blackish Green */
+    --bg-color: #050a05;
+    /* Blackish Green */
     --card-bg: rgba(5, 15, 5, 0.7);
-    --primary-color: #00ff41; /* Neon Matrix Green */
-    --secondary-color: #008f11; /* Darker Matrix Green */
-    --accent-color: #39ff14; /* Toxic Green */
+    --primary-color: #00ff41;
+    /* Neon Matrix Green */
+    --secondary-color: #008f11;
+    /* Darker Matrix Green */
+    --accent-color: #39ff14;
+    /* Toxic Green */
     --text-main: #e0ffe0;
     --text-muted: #8abeb7;
     --border-color: rgba(0, 255, 65, 0.15);
-    
+
     --font-heading: 'Orbitron', sans-serif;
     --font-body: 'JetBrains Mono', monospace;
-    
+
     --transition-fast: 0.3s ease;
     --transition-slow: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -34,7 +38,22 @@ body {
     font-family: var(--font-body);
     line-height: 1.6;
     overflow-x: hidden;
-    cursor: none; /* Hide default cursor for custom cursor */
+    cursor: none;
+    /* Hide default cursor for custom cursor */
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('ai_robot_bg.png') no-repeat center center;
+    background-size: cover;
+    z-index: -2;
+    opacity: 0.35;
+    pointer-events: none;
 }
 
 /* Custom Selection */
@@ -44,7 +63,12 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-heading);
     font-weight: 600;
     line-height: 1.2;
@@ -110,41 +134,7 @@ img {
     pointer-events: none;
 }
 
-.shape {
-    position: absolute;
-    filter: blur(80px);
-    border-radius: 50%;
-    opacity: 0.6;
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.shape-1 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, var(--accent-color), transparent);
-    top: -100px;
-    left: -100px;
-}
-
-.shape-2 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, var(--primary-color), transparent);
-    bottom: -150px;
-    right: -100px;
-    animation-delay: -5s;
-}
-
-.shape-3 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, var(--secondary-color), transparent);
-    top: 40%;
-    left: 40%;
-    animation-delay: -10s;
-}
-
-/* Removed static drift animation for dynamic JS parallax */
+/* Canvas Particle Network used instead of abstract shapes */
 
 /* ======= REUSABLE CLASSES ======= */
 .section-padding {
@@ -155,47 +145,69 @@ img {
     background: var(--card-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 2rem;
+    border: none;
+    border-left: 4px solid var(--primary-color);
+    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+    padding: 2.5rem;
     transform: translate(var(--mouse-x, 0px), var(--mouse-y, 0px));
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
 }
 
 .glass-card:hover {
     transform: translate(var(--mouse-x, 0px), calc(var(--mouse-y, 0px) - 5px));
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border-color: rgba(0, 255, 65, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background: rgba(5, 15, 5, 0.9);
+}
+
+/* Scanline Effect */
+body::after {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 999;
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
 }
 
 .btn {
     display: inline-block;
-    padding: 0.8rem 2rem;
-    border-radius: 30px;
-    font-weight: 500;
+    padding: 0.8rem 2.5rem;
+    font-weight: 600;
     font-family: var(--font-heading);
+    letter-spacing: 1px;
+    text-transform: uppercase;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     z-index: 1;
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+    transition: var(--transition-fast);
 }
 
 .btn-primary {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background: var(--primary-color);
     color: #000;
     border: none;
     box-shadow: 0 4px 15px rgba(0, 255, 65, 0.3);
 }
 
 .btn-primary:hover {
-    box-shadow: 0 6px 20px rgba(0, 255, 65, 0.5);
-    color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 255, 65, 0.8);
+    background: #fff;
+    color: #000;
 }
 
 .btn-secondary {
-    background: transparent;
-    color: var(--text-main);
-    border: 2px solid var(--primary-color);
+    background: rgba(0, 255, 65, 0.1);
+    color: var(--primary-color);
+    border: none;
+    border-left: 2px solid var(--primary-color);
+    border-right: 2px solid var(--primary-color);
 }
 
 .btn-secondary:hover {
@@ -212,36 +224,27 @@ img {
 .section-title h2 {
     font-size: 2.5rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
+    color: var(--text-muted);
 }
 
-.section-title h2 span {
+.section-title h2::before {
+    content: '[ ';
     color: var(--primary-color);
 }
 
+.section-title h2::after {
+    content: ' ]';
+    color: var(--primary-color);
+}
+
+.section-title h2 span {
+    color: var(--text-main);
+}
+
 .underline {
-    width: 60px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), transparent);
-    margin: 10px auto 0;
-    border-radius: 2px;
-    position: relative;
-}
-
-.underline::before {
-    content: '';
-    position: absolute;
-    width: 15px;
-    height: 4px;
-    background: #fff;
-    left: 0;
-    animation: slideLine 3s infinite linear;
-}
-
-@keyframes slideLine {
-    0% { left: 0; }
-    50% { left: 45px; }
-    100% { left: 0; }
+    display: none;
+    /* Removed the standard underline */
 }
 
 /* ======= NAVIGATION ======= */
@@ -302,7 +305,8 @@ img {
     transition: width 0.3s;
 }
 
-.nav-link:hover::after, .nav-link.active::after {
+.nav-link:hover::after,
+.nav-link.active::after {
     width: 100%;
 }
 
@@ -377,51 +381,175 @@ img {
 }
 
 @keyframes glitch-anim {
-    0% { clip: rect(24px, 9999px, 86px, 0); }
-    5% { clip: rect(78px, 9999px, 12px, 0); }
-    10% { clip: rect(49px, 9999px, 73px, 0); }
-    15% { clip: rect(100px, 9999px, 2px, 0); }
-    20% { clip: rect(32px, 9999px, 89px, 0); }
-    25% { clip: rect(56px, 9999px, 45px, 0); }
-    30% { clip: rect(12px, 9999px, 55px, 0); }
-    35% { clip: rect(78px, 9999px, 11px, 0); }
-    40% { clip: rect(44px, 9999px, 34px, 0); }
-    45% { clip: rect(98px, 9999px, 76px, 0); }
-    50% { clip: rect(23px, 9999px, 2px, 0); }
-    55% { clip: rect(67px, 9999px, 44px, 0); }
-    60% { clip: rect(12px, 9999px, 88px, 0); }
-    65% { clip: rect(34px, 9999px, 55px, 0); }
-    70% { clip: rect(89px, 9999px, 12px, 0); }
-    75% { clip: rect(45px, 9999px, 77px, 0); }
-    80% { clip: rect(11px, 9999px, 33px, 0); }
-    85% { clip: rect(66px, 9999px, 99px, 0); }
-    90% { clip: rect(32px, 9999px, 44px, 0); }
-    95% { clip: rect(88px, 9999px, 11px, 0); }
-    100% { clip: rect(22px, 9999px, 55px, 0); }
+    0% {
+        clip: rect(24px, 9999px, 86px, 0);
+    }
+
+    5% {
+        clip: rect(78px, 9999px, 12px, 0);
+    }
+
+    10% {
+        clip: rect(49px, 9999px, 73px, 0);
+    }
+
+    15% {
+        clip: rect(100px, 9999px, 2px, 0);
+    }
+
+    20% {
+        clip: rect(32px, 9999px, 89px, 0);
+    }
+
+    25% {
+        clip: rect(56px, 9999px, 45px, 0);
+    }
+
+    30% {
+        clip: rect(12px, 9999px, 55px, 0);
+    }
+
+    35% {
+        clip: rect(78px, 9999px, 11px, 0);
+    }
+
+    40% {
+        clip: rect(44px, 9999px, 34px, 0);
+    }
+
+    45% {
+        clip: rect(98px, 9999px, 76px, 0);
+    }
+
+    50% {
+        clip: rect(23px, 9999px, 2px, 0);
+    }
+
+    55% {
+        clip: rect(67px, 9999px, 44px, 0);
+    }
+
+    60% {
+        clip: rect(12px, 9999px, 88px, 0);
+    }
+
+    65% {
+        clip: rect(34px, 9999px, 55px, 0);
+    }
+
+    70% {
+        clip: rect(89px, 9999px, 12px, 0);
+    }
+
+    75% {
+        clip: rect(45px, 9999px, 77px, 0);
+    }
+
+    80% {
+        clip: rect(11px, 9999px, 33px, 0);
+    }
+
+    85% {
+        clip: rect(66px, 9999px, 99px, 0);
+    }
+
+    90% {
+        clip: rect(32px, 9999px, 44px, 0);
+    }
+
+    95% {
+        clip: rect(88px, 9999px, 11px, 0);
+    }
+
+    100% {
+        clip: rect(22px, 9999px, 55px, 0);
+    }
 }
 
 @keyframes glitch-anim2 {
-    0% { clip: rect(88px, 9999px, 12px, 0); }
-    5% { clip: rect(44px, 9999px, 77px, 0); }
-    10% { clip: rect(22px, 9999px, 88px, 0); }
-    15% { clip: rect(66px, 9999px, 33px, 0); }
-    20% { clip: rect(11px, 9999px, 99px, 0); }
-    25% { clip: rect(77px, 9999px, 44px, 0); }
-    30% { clip: rect(33px, 9999px, 66px, 0); }
-    35% { clip: rect(99px, 9999px, 22px, 0); }
-    40% { clip: rect(55px, 9999px, 88px, 0); }
-    45% { clip: rect(12px, 9999px, 44px, 0); }
-    50% { clip: rect(77px, 9999px, 11px, 0); }
-    55% { clip: rect(34px, 9999px, 66px, 0); }
-    60% { clip: rect(88px, 9999px, 22px, 0); }
-    65% { clip: rect(45px, 9999px, 77px, 0); }
-    70% { clip: rect(23px, 9999px, 34px, 0); }
-    75% { clip: rect(67px, 9999px, 89px, 0); }
-    80% { clip: rect(11px, 9999px, 45px, 0); }
-    85% { clip: rect(99px, 9999px, 12px, 0); }
-    90% { clip: rect(56px, 9999px, 67px, 0); }
-    95% { clip: rect(22px, 9999px, 33px, 0); }
-    100% { clip: rect(78px, 9999px, 88px, 0); }
+    0% {
+        clip: rect(88px, 9999px, 12px, 0);
+    }
+
+    5% {
+        clip: rect(44px, 9999px, 77px, 0);
+    }
+
+    10% {
+        clip: rect(22px, 9999px, 88px, 0);
+    }
+
+    15% {
+        clip: rect(66px, 9999px, 33px, 0);
+    }
+
+    20% {
+        clip: rect(11px, 9999px, 99px, 0);
+    }
+
+    25% {
+        clip: rect(77px, 9999px, 44px, 0);
+    }
+
+    30% {
+        clip: rect(33px, 9999px, 66px, 0);
+    }
+
+    35% {
+        clip: rect(99px, 9999px, 22px, 0);
+    }
+
+    40% {
+        clip: rect(55px, 9999px, 88px, 0);
+    }
+
+    45% {
+        clip: rect(12px, 9999px, 44px, 0);
+    }
+
+    50% {
+        clip: rect(77px, 9999px, 11px, 0);
+    }
+
+    55% {
+        clip: rect(34px, 9999px, 66px, 0);
+    }
+
+    60% {
+        clip: rect(88px, 9999px, 22px, 0);
+    }
+
+    65% {
+        clip: rect(45px, 9999px, 77px, 0);
+    }
+
+    70% {
+        clip: rect(23px, 9999px, 34px, 0);
+    }
+
+    75% {
+        clip: rect(67px, 9999px, 89px, 0);
+    }
+
+    80% {
+        clip: rect(11px, 9999px, 45px, 0);
+    }
+
+    85% {
+        clip: rect(99px, 9999px, 12px, 0);
+    }
+
+    90% {
+        clip: rect(56px, 9999px, 67px, 0);
+    }
+
+    95% {
+        clip: rect(22px, 9999px, 33px, 0);
+    }
+
+    100% {
+        clip: rect(78px, 9999px, 88px, 0);
+    }
 }
 
 .role {
@@ -454,10 +582,12 @@ img {
     position: relative;
     width: 350px;
     height: 450px;
-    border-radius: 30px;
+    clip-path: polygon(30px 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0 30px);
     overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    border: 5px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 50px rgba(0, 255, 65, 0.2);
+    border-left: 5px solid var(--primary-color);
+    border-bottom: 5px solid var(--primary-color);
+    background: rgba(5, 15, 5, 0.5);
     animation: float 6s ease-in-out infinite;
 }
 
@@ -478,8 +608,8 @@ img {
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     padding: 10px 20px;
-    border-radius: 50px;
-    border: 1px solid var(--border-color);
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    border-left: 2px solid var(--primary-color);
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -491,7 +621,8 @@ img {
 .badge-1 {
     top: 20%;
     left: -30px;
-    color: #FFD43B; /* Python Yellow */
+    color: #FFD43B;
+    /* Python Yellow */
     animation-delay: 1s;
 }
 
@@ -503,8 +634,13 @@ img {
 }
 
 @keyframes float {
-    0% { transform: translateY(0px); }
-    100% { transform: translateY(-20px); }
+    0% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
 }
 
 /* ======= ABOUT SECTION ======= */
@@ -513,8 +649,21 @@ img {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 2rem;
     align-items: center;
+}
+
+@media screen and (min-width: 993px) {
+    .about-container {
+        grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    .education.reveal-right {
+        margin-left: -80px;
+        /* Overlap effect */
+        margin-top: 50px;
+        z-index: 2;
+    }
 }
 
 .about-text p {
@@ -572,6 +721,13 @@ img {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
+}
+
+@media screen and (min-width: 993px) {
+    .experience-col:nth-child(2) {
+        margin-top: 100px;
+        /* Stagger columns */
+    }
 }
 
 .col-title {
@@ -647,6 +803,14 @@ img {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
+    align-items: start;
+}
+
+@media screen and (min-width: 768px) {
+    .skill-category:nth-child(even) {
+        margin-top: 40px;
+        margin-bottom: -40px;
+    }
 }
 
 .skill-category h3 {
@@ -697,13 +861,21 @@ img {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
+    align-items: start;
+}
+
+@media screen and (min-width: 768px) {
+    .cert-card:nth-child(odd) {
+        margin-top: 50px;
+        margin-bottom: -50px;
+    }
 }
 
 .cert-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
+    background: rgba(5, 15, 5, 0.4);
+    border: 1px solid rgba(0, 255, 65, 0.2);
     padding: 2rem;
-    border-radius: 16px;
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
     position: relative;
     overflow: hidden;
     transform: translate(var(--mouse-x, 0px), var(--mouse-y, 0px));
@@ -725,7 +897,8 @@ img {
 
 .cert-card:hover {
     transform: translate(var(--mouse-x, 0px), calc(var(--mouse-y, 0px) - 5px));
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+    background: rgba(0, 255, 65, 0.05);
 }
 
 .cert-card:hover::before {
@@ -770,7 +943,8 @@ img {
     gap: 3rem;
 }
 
-.contact-info h3, .contact-form h3 {
+.contact-info h3,
+.contact-form h3 {
     font-size: 1.8rem;
     margin-bottom: 15px;
     color: var(--text-main);
@@ -821,7 +995,8 @@ img {
     margin-bottom: 3px;
 }
 
-.item-text a, .item-text p {
+.item-text a,
+.item-text p {
     font-size: 1rem;
     font-weight: 500;
 }
@@ -936,10 +1111,14 @@ footer p {
 
 /* ======= RESPONSIVE DESIGN ======= */
 @media screen and (max-width: 992px) {
-    .hero-container, .about-container, .experience-container, .contact-container {
+
+    .hero-container,
+    .about-container,
+    .experience-container,
+    .contact-container {
         grid-template-columns: 1fr;
     }
-    
+
     .hero {
         text-align: center;
         padding-top: 150px;
@@ -976,7 +1155,7 @@ footer p {
         transition: right 0.3s;
         border-bottom: 1px solid var(--border-color);
     }
-    
+
     .nav-links.active {
         right: 0;
     }
@@ -989,10 +1168,12 @@ footer p {
         padding: 60px 5%;
     }
 
-    .cursor-dot, .cursor-outline {
-        display: none; /* Hide custom cursor on mobile */
+    .cursor-dot,
+    .cursor-outline {
+        display: none;
+        /* Hide custom cursor on mobile */
     }
-    
+
     body {
         cursor: auto;
     }
